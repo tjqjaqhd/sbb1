@@ -1,0 +1,87 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "프론트엔드 HTML 구조 및 CSS 스타일링 구현",
+        "description": "반응형 Todo 앱 사용자 인터페이스를 위한 HTML 구조와 현대적인 CSS 스타일을 구현합니다.",
+        "details": "public/index.html을 기존 API 문서 페이지에서 완전한 Todo 앱 인터페이스로 변환합니다. 시맨틱 HTML5 요소를 사용하여 Todo 입력 폼, 목록 표시 영역, 필터 버튼, 통계 표시를 포함한 구조를 생성합니다. Flexbox/Grid를 활용한 반응형 디자인으로 모바일과 데스크톱에서 모두 최적화된 레이아웃을 구현합니다. 현대적인 CSS 기법(CSS Custom Properties, 트랜지션, 호버 효과)을 적용하여 사용자 친화적인 인터페이스를 만듭니다.",
+        "testStrategy": "다양한 화면 크기에서 레이아웃 테스트, HTML 시맨틱 검증, CSS 반응형 동작 확인",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "JavaScript 코어 기능 및 API 연동 구현",
+        "description": "기존 백엔드 API와 연동하여 Todo CRUD operations을 수행하는 JavaScript 기능을 구현합니다.",
+        "details": "Fetch API를 사용하여 기존 백엔드 엔드포인트(/api/todos, /api/todos/:id, /api/todos/stats)와 통신하는 모듈을 구현합니다. DOM 조작을 통한 동적 UI 업데이트, 에러 처리 및 사용자 피드백 시스템을 포함합니다. Todo 추가, 완료 토글, 삭제 기능과 실시간 통계 업데이트를 구현합니다. 모던 ES6+ 문법(async/await, arrow functions, template literals)을 사용하여 깔끔하고 유지보수 가능한 코드를 작성합니다.",
+        "testStrategy": "각 API 호출 기능 단위 테스트, 에러 시나리오 처리 검증, DOM 업데이트 정확성 확인",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "in-progress",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "사용자 인터랙션 및 상태 관리 구현",
+        "description": "Todo 필터링, 입력 검증, 사용자 피드백 등 고급 인터랙션 기능을 구현합니다.",
+        "details": "All/Active/Completed 필터 기능을 구현하여 Todo 상태별 표시가 가능하도록 합니다. 입력 필드 검증(빈 문자열, 최대 길이 제한)과 실시간 피드백을 제공합니다. 키보드 단축키(Enter로 Todo 추가) 지원과 접근성(ARIA 레이블, 키보드 네비게이션)을 구현합니다. 로딩 상태 표시, 성공/실패 메시지, 삭제 확인 다이얼로그 등 사용자 경험을 향상시키는 기능을 추가합니다. 브라우저 로컬 저장소를 활용한 필터 상태 유지 기능을 구현합니다.",
+        "testStrategy": "필터링 로직 테스트, 접근성 기준 준수 확인, 키보드 인터랙션 검증, 사용자 피드백 동작 테스트",
+        "priority": "medium",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Playwright 테스트 환경 설정 및 기본 테스트 구현",
+        "description": "Playwright 테스트 프레임워크를 설정하고 기본적인 E2E 테스트 시나리오를 구현합니다.",
+        "details": "package.json에 Playwright 의존성을 추가하고 기본 설정을 구성합니다. playwright.config.js에서 Chromium, Firefox, Safari 브라우저 테스트 환경을 설정합니다. 테스트 실행 전 서버 자동 시작/종료 설정을 포함합니다. 기본 페이지 로드, 요소 존재 확인, 간단한 상호작용 테스트를 작성합니다. 테스트 결과 리포트 생성 설정과 CI 환경 대응을 위한 헤드리스 모드 구성을 포함합니다. 테스트 데이터 초기화 및 정리를 위한 헬퍼 함수를 구현합니다.",
+        "testStrategy": "Playwright 설치 및 설정 검증, 기본 테스트 실행 확인, 다중 브라우저 호환성 테스트",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "포괄적인 E2E 테스트 시나리오 구현",
+        "description": "사용자 여정을 포괄하는 완전한 End-to-End 테스트 시나리오를 구현합니다.",
+        "details": "완전한 사용자 워크플로우를 테스트하는 시나리오를 구현합니다: Todo 추가 → 완료 토글 → 필터링 → 삭제 전체 과정. API 에러 상황(서버 다운, 네트워크 오류) 시 프론트엔드 에러 처리 테스트를 포함합니다. 다양한 화면 크기에서의 반응형 디자인 테스트와 모바일 터치 인터랙션 검증을 구현합니다. 접근성 테스트(키보드 네비게이션, 스크린 리더 호환성)와 성능 테스트(페이지 로드 시간, API 응답 시간)를 추가합니다. 브라우저별 호환성 테스트와 동시성 테스트(여러 사용자 시뮬레이션)를 구현합니다.",
+        "testStrategy": "전체 사용자 여정 검증, 에러 시나리오 처리 테스트, 크로스 브라우저 호환성 확인, 성능 및 접근성 검증",
+        "priority": "medium",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "프로덕션 최적화 및 문서화 완성",
+        "description": "프로덕션 배포를 위한 최적화 작업과 포괄적인 문서화를 완성합니다.",
+        "details": "CSS 및 JavaScript 코드 최적화(미니피케이션, 번들링 없이 최적화된 구조)를 수행합니다. README.md에 프로젝트 설명, 설치 방법, 실행 가이드, API 문서를 작성합니다. 개발자를 위한 코드 주석과 함수 문서화를 완성합니다. 배포 가이드와 환경 설정 방법을 포함한 운영 문서를 작성합니다. 성능 최적화(이미지 압축, 캐싱 전략, 지연 로딩)와 SEO 기본 설정을 적용합니다. 보안 헤더 설정과 XSS 방지 등 기본적인 보안 조치를 구현합니다. 테스트 커버리지 리포트 생성과 코드 품질 메트릭을 설정합니다.",
+        "testStrategy": "성능 메트릭 측정, 문서 완성도 검증, 보안 취약점 스캔, 배포 프로세스 테스트",
+        "priority": "low",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-09-25T00:37:25.129Z",
+      "updated": "2025-09-25T00:43:44.455Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
