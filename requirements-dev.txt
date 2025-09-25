@@ -1,0 +1,26 @@
+# 기본 의존성 포함
+-r requirements.txt
+
+# 개발 도구
+jupyter>=1.0.0
+ipython>=8.17.0
+notebook>=7.0.0
+
+# 디버깅
+pdb++>=0.10.3
+ipdb>=0.13.13
+
+# 문서화
+mkdocs>=1.5.3
+mkdocs-material>=9.4.8
+
+# 성능 분석
+memory-profiler>=0.61.0
+line-profiler>=4.1.1
+
+# API 문서 테스트
+pytest-mock>=3.12.0
+faker>=20.1.0
+
+# 추가 개발 도구
+pre-commit>=3.5.0
