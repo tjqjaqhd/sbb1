@@ -98,7 +98,7 @@ class BithumbHTTPClient:
         API 엔드포인트 URL 생성
 
         Args:
-            endpoint: API 엔드포인트 경로 (예: "/public/ticker/BTC_KRW")
+            endpoint: API 엔드포인트 경로 (예: "/public/ticker/BTC_KRW" 또는 "/v1/accounts")
 
         Returns:
             완전한 API URL
@@ -107,7 +107,8 @@ class BithumbHTTPClient:
         if not endpoint.startswith('/'):
             endpoint = '/' + endpoint
 
-        # 빗썸 API 1.2에서는 URL에 버전 번호가 포함되지 않음
+        # v1, v2로 시작하는 엔드포인트는 그대로 사용 (API 2.0)
+        # 그 외는 기본 API 1.2 방식
         return f"{self.BASE_URL}{endpoint}"
 
     async def _make_request(
@@ -172,14 +173,22 @@ class BithumbHTTPClient:
             except Exception as e:
                 last_exception = e
 
-                # 재시도 가능한 오류인지 확인
-                if not is_retryable_error(e) or attempt >= max_retries:
+                # 재시도 가능한 오류인지 확인 (안전한 방식으로)
+                try:
+                    should_retry = is_retryable_error(e)
+                except Exception:
+                    should_retry = False  # 에러 발생 시 재시도하지 않음
+
+                if not should_retry or attempt >= max_retries:
                     # 재시도 불가능하거나 최대 시도 횟수 도달
                     logger.error(f"빗썸 API 요청 최종 실패 (시도 {attempt + 1}/{max_retries + 1}): {str(e)}")
                     raise e
 
-                # 재시도 대기 시간 계산
-                retry_delay = get_retry_delay(e, attempt) * retry_backoff
+                # 재시도 대기 시간 계산 (안전한 방식으로)
+                try:
+                    retry_delay = get_retry_delay(e, attempt) * retry_backoff
+                except Exception:
+                    retry_delay = 1.0 * (2 ** attempt)  # 기본 지수 백오프
 
                 # 지터 추가 (동시 재시도 방지)
                 jitter = random.uniform(0.1, 0.5)
@@ -278,9 +287,6 @@ class BithumbHTTPClient:
             logger.error(f"빗썸 API 타임아웃: {url}")
             raise BithumbTimeoutError(f"요청 타임아웃: {url}")
 
-        except aiohttp.ClientTimeout as e:
-            logger.error(f"빗썸 API 클라이언트 타임아웃: {url}")
-            raise BithumbTimeoutError(f"클라이언트 타임아웃: {url}")
 
         except aiohttp.ClientConnectorError as e:
             logger.error(f"빗썸 API 연결 실패: {str(e)}")
@@ -290,8 +296,14 @@ class BithumbHTTPClient:
             logger.error(f"빗썸 API 클라이언트 오류: {str(e)}")
             raise BithumbNetworkError(f"네트워크 오류: {str(e)}")
 
-        except (BithumbAPIError, BithumbNetworkError, BithumbTimeoutError):
+        except BithumbAPIError:
             # 이미 처리된 빗썸 API 오류는 그대로 전파
+            raise
+        except BithumbNetworkError:
+            # 이미 처리된 네트워크 오류는 그대로 전파
+            raise
+        except BithumbTimeoutError:
+            # 이미 처리된 타임아웃 오류는 그대로 전파
             raise
 
         except Exception as e:

@@ -222,6 +222,32 @@ class BithumbAPIKeyManager:
         self._keys_loaded = False
         logger.debug("API 키 캐시 클리어 완료")
 
+    def generate_query_string(self, params: Dict[str, Any]) -> str:
+        """
+        빗썸 API 2.0 규격에 맞는 쿼리 문자열 생성
+
+        Args:
+            params: 요청 파라미터
+
+        Returns:
+            쿼리 문자열
+        """
+        if not params:
+            return ""
+
+        # 파라미터를 알파벳 순으로 정렬
+        sorted_items = []
+        for key in sorted(params.keys()):
+            value = params[key]
+            # 값이 리스트인 경우 처리
+            if isinstance(value, list):
+                for v in value:
+                    sorted_items.append(f"{key}={v}")
+            else:
+                sorted_items.append(f"{key}={value}")
+
+        return "&".join(sorted_items)
+
     def generate_query_hash(self, params: Dict[str, Any]) -> str:
         """
         요청 파라미터의 SHA512 해시 생성
@@ -235,10 +261,7 @@ class BithumbAPIKeyManager:
         if not params:
             return ""
 
-        # 파라미터를 정렬하고 쿼리 문자열로 변환
-        sorted_params = sorted(params.items())
-        query_string = "&".join(f"{k}={v}" for k, v in sorted_params)
-
+        query_string = self.generate_query_string(params)
         # SHA512 해시 생성
         return hashlib.sha512(query_string.encode('utf-8')).hexdigest()
 
@@ -285,7 +308,7 @@ class BithumbAPIKeyManager:
 
     def get_auth_headers(self, endpoint: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, str]:
         """
-        빗썸 API JWT 기반 인증 헤더 생성
+        빗썸 API 2.0 JWT 기반 인증 헤더 생성
 
         Args:
             endpoint: API 엔드포인트
@@ -300,10 +323,12 @@ class BithumbAPIKeyManager:
         # JWT 토큰 생성
         jwt_token = self.generate_jwt_token(endpoint, params)
 
-        # JWT 기반 인증 헤더
+        # 빗썸 API 2.0 필수 헤더
         headers = {
             "Authorization": f"Bearer {jwt_token}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "BithumbTradingBot/1.0"
         }
 
         logger.debug(f"JWT 인증 헤더 생성 완료: {endpoint}")

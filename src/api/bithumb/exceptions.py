@@ -5,6 +5,7 @@ API 호출 중 발생할 수 있는 다양한 예외 상황을 정의합니다.
 """
 
 from typing import Optional, Dict, Any
+import asyncio
 import aiohttp
 
 
@@ -204,7 +205,7 @@ def is_retryable_error(error: BaseException) -> bool:
         재시도 가능 여부
     """
     # 네트워크 관련 오류는 재시도 가능
-    if isinstance(error, (BithumbNetworkError, BithumbTimeoutError, aiohttp.ClientTimeout)):
+    if isinstance(error, (BithumbNetworkError, BithumbTimeoutError)):
         return True
 
     # 서버 오류는 재시도 가능
@@ -219,8 +220,12 @@ def is_retryable_error(error: BaseException) -> bool:
     if isinstance(error, BithumbMaintenanceError):
         return True
 
-    # HTTP 연결 오류
+    # HTTP 연결 오류 (aiohttp의 올바른 예외 클래스들)
     if isinstance(error, (aiohttp.ClientError, aiohttp.ServerTimeoutError)):
+        return True
+
+    # asyncio 타임아웃 오류
+    if isinstance(error, asyncio.TimeoutError):
         return True
 
     return False
