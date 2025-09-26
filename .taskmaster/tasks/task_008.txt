@@ -1,0 +1,73 @@
+# Task ID: 8
+# Title: 자동 주문 실행 시스템 구현
+# Status: pending
+# Dependencies: 2, 7
+# Priority: high
+# Description: 매매 신호를 받아 실제 주문을 실행하는 시스템 개발
+# Details:
+비동기 주문 실행, 시장가/지정가 선택, 슬리피지 제어, 부분 체결 처리, 주문 상태 추적. 동시 주문 제한, 일일 거래 한도 설정, 긴급 전체 청산 기능. Circuit breaker 패턴 적용
+
+# Test Strategy:
+모의 거래 테스트, 주문 지연 시간 측정, 에러 시나리오 테스트, 한도 초과 방지 테스트
+
+# Subtasks:
+## 1. 주문 실행 엔진 아키텍처 설계 [pending]
+### Dependencies: None
+### Description: 비동기 주문 실행을 위한 기본 아키텍처와 인터페이스 설계
+### Details:
+asyncio 기반 주문 큐 시스템, 주문 타입별 처리 로직 분리, 상태 머신 패턴 적용, 주문 실행 워커 풀 설계
+
+## 2. 시장가/지정가 주문 로직 구현 [pending]
+### Dependencies: 8.1
+### Description: 시장가와 지정가 주문의 각기 다른 실행 로직 구현
+### Details:
+시장가 주문 즉시 실행, 지정가 주문 조건부 실행, 주문 타입별 유효성 검증, 가격 범위 체크
+
+## 3. 슬리피지 제어 메커니즘 구현 [pending]
+### Dependencies: 8.2
+### Description: 주문 실행 시 슬리피지를 최소화하기 위한 제어 로직 구현
+### Details:
+실시간 스프레드 모니터링, 허용 슬리피지 임계값 설정, 분할 주문 로직, 시장 깊이 기반 수량 조절
+
+## 4. 부분 체결 처리 시스템 구현 [pending]
+### Dependencies: 8.2
+### Description: 주문의 부분 체결 상황을 처리하는 로직 구현
+### Details:
+체결 진행률 추적, 미체결 주문 관리, 부분 체결 후 후속 처리, 체결 완료 조건 판단
+
+## 5. 주문 상태 추적 시스템 구현 [pending]
+### Dependencies: 8.1
+### Description: 모든 주문의 생명주기를 추적하고 관리하는 시스템 구현
+### Details:
+주문 상태 데이터베이스 설계, 실시간 상태 업데이트, 상태 변경 이벤트 발행, 상태 조회 API
+
+## 6. 동시 주문 제한 기능 구현 [pending]
+### Dependencies: 8.5
+### Description: 동시에 실행 가능한 주문 수를 제한하는 기능 구현
+### Details:
+세마포어 기반 동시성 제어, 주문 큐 관리, 우선순위 기반 주문 처리, 대기열 상태 모니터링
+
+## 7. 거래 한도 관리 시스템 구현 [pending]
+### Dependencies: 8.5
+### Description: 일일 거래 한도 및 포지션 크기 제한 관리 시스템 구현
+### Details:
+일일/월간 거래 한도 설정, 포지션 크기 제한, 한도 초과 방지, 한도 리셋 스케줄러, 한도 사용량 추적
+
+## 8. 긴급 전체 청산 기능 구현 [pending]
+### Dependencies: 8.6, 8.7
+### Description: 긴급 상황 시 모든 포지션을 즉시 청산하는 기능 구현
+### Details:
+원클릭 전체 청산, 청산 우선순위 설정, 청산 진행률 모니터링, 청산 완료 확인, 청산 이력 기록
+
+## 9. Circuit Breaker 패턴 적용 [pending]
+### Dependencies: 8.8
+### Description: 시스템 안정성을 위한 Circuit Breaker 패턴 구현
+### Details:
+API 호출 실패율 모니터링, 자동 차단/복구 로직, 상태별 대응 전략, 수동 차단/해제 기능, 알림 시스템 연동
+
+## 10. 주문 실행 테스트 및 검증 시스템 구현 [pending]
+### Dependencies: 8.9
+### Description: 주문 실행 시스템의 안정성과 정확성을 검증하는 테스트 시스템 구현
+### Details:
+모의 거래 모드, 주문 지연 시간 측정, 에러 시나리오 시뮬레이션, 백테스트 환경, 성능 벤치마크
+

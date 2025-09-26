@@ -1,0 +1,67 @@
+# Task ID: 3
+# Title: 실시간 WebSocket 데이터 수집기 구현
+# Status: pending
+# Dependencies: 2
+# Priority: high
+# Description: 빗썸 WebSocket을 통한 실시간 시세, 호가, 체결 데이터 수집 시스템 구현
+# Details:
+websockets 라이브러리 사용, 자동 재연결 메커니즘, 메시지 파싱 및 검증, 데이터 버퍼링 (Redis Queue 활용), 백프레셔 핸들링. 실시간 ticker, orderbook, trade 데이터 스트림 처리
+
+# Test Strategy:
+WebSocket 연결 안정성 테스트, 데이터 무결성 검증, 재연결 시나리오 테스트
+
+# Subtasks:
+## 1. WebSocket 연결 설정 및 기본 구조 구현 [pending]
+### Dependencies: None
+### Description: 빗썸 WebSocket API에 연결하고 기본 메시지 송수신 구조를 구현합니다
+### Details:
+websockets 라이브러리를 사용하여 빗썸 WebSocket 엔드포인트 연결, 연결 상태 관리, 기본 메시지 송수신 로직 구현. WebSocket 클래스 생성 및 연결/해제 메서드 구현
+
+## 2. 자동 재연결 메커니즘 구현 [pending]
+### Dependencies: 3.1
+### Description: 연결 끊김 감지 및 자동 재연결 로직을 구현합니다
+### Details:
+연결 끊김 감지, 지수 백오프를 적용한 재연결 시도, 최대 재시도 횟수 제한, 연결 상태 모니터링. 하트비트 핑/퐁 메커니즘으로 연결 상태 체크
+
+## 3. 메시지 파싱 및 검증 로직 구현 [pending]
+### Dependencies: 3.1
+### Description: 수신된 WebSocket 메시지를 파싱하고 데이터 유효성을 검증합니다
+### Details:
+JSON 메시지 파싱, 스키마 검증, 데이터 타입 변환, 오류 메시지 처리. pydantic을 활용한 데이터 모델 정의 및 검증 로직 구현
+
+## 4. Redis Queue 데이터 버퍼링 시스템 구현 [pending]
+### Dependencies: 3.3
+### Description: 수신된 데이터를 Redis Queue에 버퍼링하는 시스템을 구현합니다
+### Details:
+Redis 연결 관리, 큐 생성 및 관리, 데이터 직렬화/역직렬화, 큐 크기 모니터링. redis-py 라이브러리 활용하여 안전한 큐 작업 구현
+
+## 5. 백프레셔 핸들링 메커니즘 구현 [pending]
+### Dependencies: 3.4
+### Description: 높은 데이터 처리량 상황에서의 백프레셔를 처리합니다
+### Details:
+큐 크기 모니터링, 임계값 기반 처리 속도 조절, 데이터 드롭 정책, 메모리 사용량 관리. 동적 버퍼 크기 조정 및 처리 속도 제어 로직
+
+## 6. Ticker 데이터 스트림 처리 구현 [pending]
+### Dependencies: 3.2, 3.5
+### Description: 실시간 시세(Ticker) 데이터를 수집하고 처리합니다
+### Details:
+Ticker 구독 메시지 송신, 시세 데이터 파싱, 가격 변동률 계산, 데이터 정규화. 심볼별 최신 시세 캐싱 및 업데이트 로직 구현
+
+## 7. Orderbook 데이터 스트림 처리 구현 [pending]
+### Dependencies: 3.2, 3.5
+### Description: 실시간 호가(Orderbook) 데이터를 수집하고 관리합니다
+### Details:
+Orderbook 구독, 호가 데이터 파싱, 매수/매도 호가 정렬, 호가 변경 감지. 효율적인 호가북 업데이트 알고리즘 및 스냅샷 관리
+
+## 8. Trade 데이터 스트림 처리 구현 [pending]
+### Dependencies: 3.2, 3.5
+### Description: 실시간 체결(Trade) 데이터를 수집하고 처리합니다
+### Details:
+Trade 구독 메시지, 체결 데이터 파싱, 체결량 집계, 거래 패턴 분석. 중복 체결 데이터 필터링 및 시간 기반 데이터 정렬
+
+## 9. 안정성 및 성능 테스트 구현 [pending]
+### Dependencies: 3.6, 3.7, 3.8
+### Description: WebSocket 데이터 수집기의 안정성과 성능을 검증합니다
+### Details:
+연결 안정성 테스트, 데이터 무결성 검증, 메모리 누수 테스트, 성능 벤치마크. 재연결 시나리오 테스트, 백프레셔 상황 시뮬레이션, 장기 실행 안정성 테스트
+

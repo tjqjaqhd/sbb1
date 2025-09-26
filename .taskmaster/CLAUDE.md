@@ -414,4 +414,22 @@ These commands make AI calls and may take up to a minute:
 
 ---
 
+## 프로젝트 개발 규칙
+
+### 이모지 사용 금지 정책
+
+**절대 금지**: 코드, 주석, 문서, 커밋 메시지, 출력 등에서 이모지 사용을 엄격히 금지합니다.
+
+**사유**: 이모지는 Windows 터미널 및 다양한 개발 환경에서 유니코드 인코딩 오류를 발생시킵니다.
+
+**예외**: 없음. 이모지 대신 명확하고 설명적인 텍스트를 사용하세요.
+
+**예시**:
+- [X] 잘못된 예: `print("로켓 프로세스 시작...")` (이모지 사용)
+- [O] 올바른 예: `print("프로세스 시작...")`
+- [X] 잘못된 예: `# 도구 이 버그 수정` (이모지 사용)
+- [O] 올바른 예: `# 이 버그 수정`
+
+---
+
 _This guide ensures Claude Code has immediate access to Task Master's essential functionality for agentic development workflows._

@@ -1,0 +1,61 @@
+# Task ID: 12
+# Title: 백테스팅 시스템 구현
+# Status: pending
+# Dependencies: 6, 7
+# Priority: medium
+# Description: 매매 전략을 과거 데이터로 검증하는 백테스팅 시스템 개발
+# Details:
+Vectorbt 라이브러리 활용, 다양한 성과 지표 계산(Sharpe ratio, Sortino ratio, MDD), 슬리피지 및 수수료 고려, 몬테카를로 시뮬레이션, 워크 포워드 분석. 멀티프로세싱 병렬 처리
+
+# Test Strategy:
+알려진 전략의 백테스팅 결과 검증, 성능 지표 정확성 테스트, 대용량 데이터 처리 테스트
+
+# Subtasks:
+## 1. Vectorbt 라이브러리 환경 설정 및 기본 구조 구현 [pending]
+### Dependencies: None
+### Description: 백테스팅을 위한 Vectorbt 라이브러리 설치 및 기본 백테스팅 환경 구성
+### Details:
+Vectorbt 라이브러리 설치, 필요한 의존성 패키지(numpy, pandas, numba) 설정, 백테스팅 모듈 기본 구조 생성, 데이터 입출력 인터페이스 정의
+
+## 2. 백테스팅 엔진 핵심 로직 구현 [pending]
+### Dependencies: 12.1
+### Description: 매매 신호를 기반으로 백테스팅을 실행하는 핵심 엔진 구현
+### Details:
+전략 신호 처리, 포지션 관리, 매수/매도 실행 로직, 포트폴리오 가치 계산, 시간별 수익률 추적
+
+## 3. 성과 지표 계산 모듈 구현 [pending]
+### Dependencies: 12.2
+### Description: Sharpe ratio, Sortino ratio, MDD 등 주요 성과 지표 계산 기능 구현
+### Details:
+총 수익률, 연환산 수익률, 변동성, Sharpe ratio, Sortino ratio, 최대낙폭(MDD), Win rate, Profit factor 계산 함수
+
+## 4. 슬리피지 및 거래 수수료 모델링 [pending]
+### Dependencies: 12.2
+### Description: 실제 거래 환경을 반영한 슬리피지와 수수료 모델 구현
+### Details:
+빗썸 수수료 구조 반영(메이커/테이커), 시장 충격 기반 슬리피지 모델, 거래량 기반 슬리피지 계산, 수수료 최적화 로직
+
+## 5. 몬테카를로 시뮬레이션 구현 [pending]
+### Dependencies: 12.3, 12.4
+### Description: 전략 강건성 검증을 위한 몬테카를로 시뮬레이션 모듈 구현
+### Details:
+무작위 샘플링 기반 시뮬레이션, 부트스트래핑 방법론, 신뢰구간 계산, 위험 지표 분포 분석, 결과 통계적 검증
+
+## 6. 워크 포워드 분석 시스템 구현 [pending]
+### Dependencies: 12.3, 12.4
+### Description: 시간 구간별 전략 성능 안정성 검증을 위한 워크 포워드 분석 구현
+### Details:
+슬라이딩 윈도우 기반 분석, 구간별 성과 지표 계산, 일관성 지표 측정, 최적화 기간과 검증 기간 분리, 오버피팅 감지
+
+## 7. 멀티프로세싱 병렬 처리 최적화 [pending]
+### Dependencies: 12.5, 12.6
+### Description: 대용량 데이터 처리를 위한 병렬 처리 및 성능 최적화 구현
+### Details:
+멀티프로세싱 풀 설정, 데이터 청크 분할, 메모리 효율적인 처리, Numba JIT 컴파일 최적화, 진행률 추적
+
+## 8. 백테스팅 리포트 생성 시스템 [pending]
+### Dependencies: 12.7
+### Description: 백테스팅 결과를 시각화하고 종합 리포트를 생성하는 시스템 구현
+### Details:
+수익률 곡선 차트, 드로우다운 차트, 성과 지표 테이블, PDF/HTML 리포트 생성, 비교 분석 기능, 대시보드 연동
+

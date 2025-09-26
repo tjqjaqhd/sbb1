@@ -1,0 +1,55 @@
+# Task ID: 6
+# Title: 기술적 지표 계산 엔진 구현
+# Status: pending
+# Dependencies: 3, 4
+# Priority: medium
+# Description: 실시간 기술적 분석 지표 계산을 위한 엔진 구현
+# Details:
+TA-Lib 또는 pandas-ta 활용, 실시간 스트리밍 계산 최적화. 구현 지표: SMA, EMA, RSI, MACD, 볼린저 밴드, 스토캐스틱, Williams %R. 메모리 효율적인 링 버퍼 구조, 병렬 처리
+
+# Test Strategy:
+지표 정확성 검증(알려진 값과 비교), 성능 테스트, 메모리 사용량 모니터링
+
+# Subtasks:
+## 1. 기본 이동평균 지표 구현 (SMA, EMA) [pending]
+### Dependencies: None
+### Description: 단순 이동평균과 지수 이동평균 계산 알고리즘 구현
+### Details:
+SMA(Simple Moving Average)와 EMA(Exponential Moving Average) 계산 함수 구현. numpy 배열 기반 효율적인 계산, 다양한 기간(5, 10, 20, 50, 200일) 지원. 초기 데이터 부족 시 예외 처리, 실시간 업데이트를 위한 증분 계산 구조
+
+## 2. RSI 및 MACD 지표 계산 구현 [pending]
+### Dependencies: 6.1
+### Description: 상대강도지수(RSI)와 MACD 오실레이터 지표 구현
+### Details:
+RSI(Relative Strength Index) 14일 기본값으로 계산, 과매수/과매도 임계값 설정. MACD(Moving Average Convergence Divergence) - 12일/26일 EMA, 9일 시그널 라인, 히스토그램 계산. Wilder's smoothing 방법 적용
+
+## 3. 볼린저 밴드 및 스토캐스틱 지표 구현 [pending]
+### Dependencies: 6.1
+### Description: 변동성 기반 볼린저 밴드와 스토캐스틱 오실레이터 구현
+### Details:
+볼린저 밴드: 20일 SMA 기준, 2 표준편차 상하 밴드 계산, 밴드폭과 %B 지표 포함. 스토캐스틱 오실레이터: Fast %K, Slow %K, %D 계산, 14일 기간, 3일 smoothing 적용. 0-100 범위 정규화
+
+## 4. Williams %R 및 추가 보조지표 구현 [pending]
+### Dependencies: 6.2
+### Description: Williams %R과 기타 보조 기술적 지표들 구현
+### Details:
+Williams %R: 14일 기간, -100~0 범위 계산, 과매수(-20)/과매도(-80) 레벨 설정. 추가 지표: CCI(Commodity Channel Index), ROC(Rate of Change), ATR(Average True Range) 구현. 각 지표별 매개변수 커스터마이징 지원
+
+## 5. 링 버퍼 메모리 최적화 구조 구현 [pending]
+### Dependencies: 6.3
+### Description: 메모리 효율적인 순환 버퍼를 활용한 데이터 관리 시스템 구현
+### Details:
+고정 크기 링 버퍼로 과거 데이터 관리, 최대 1000개 캔들 데이터 보존. 메모리 사용량 최적화, 가비지 컬렉션 부담 최소화. 슬라이딩 윈도우 방식으로 지표 계산 최적화, 중복 계산 방지를 위한 캐싱 메커니즘
+
+## 6. 병렬 처리 엔진 구현 [pending]
+### Dependencies: 6.4, 6.5
+### Description: 멀티프로세싱을 활용한 병렬 지표 계산 시스템 구현
+### Details:
+asyncio와 concurrent.futures 활용한 비동기 병렬 처리. 종목별 지표 계산을 독립적인 프로세스로 분산, CPU 코어 수에 따른 워커 풀 크기 자동 조정. 프로세스 간 데이터 공유를 위한 공유 메모리 활용, 처리 결과 병합 로직
+
+## 7. 실시간 스트리밍 최적화 및 TA-Lib 통합 [pending]
+### Dependencies: 6.6
+### Description: 실시간 데이터 스트림 처리 최적화 및 TA-Lib 라이브러리 통합
+### Details:
+WebSocket을 통한 실시간 가격 데이터 수신 시 즉시 지표 계산 업데이트. TA-Lib 라이브러리와의 결과 비교 검증, 성능 벤치마킹. 지연시간 최소화를 위한 프리컴파일된 계산식 사용, 메모리 풀링으로 객체 생성 오버헤드 제거
+

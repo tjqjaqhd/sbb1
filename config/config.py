@@ -42,6 +42,14 @@ class Settings:
     # =============================================================================
     # 데이터베이스 설정
     # =============================================================================
+    # 개별 데이터베이스 설정 (Alembic 등에서 사용)
+    DB_HOST: str = config("DB_HOST", default="localhost")
+    DB_PORT: int = config("DB_PORT", default=5432, cast=int)
+    DB_USER: str = config("DB_USER", default="user")
+    DB_PASSWORD: str = config("DB_PASSWORD", default="password")
+    DB_NAME: str = config("DB_NAME", default="bithumb_trading")
+
+    # 전체 데이터베이스 URL
     DATABASE_URL: str = config(
         "DATABASE_URL",
         default="postgresql+asyncpg://user:password@localhost:5432/bithumb_trading"

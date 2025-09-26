@@ -1,0 +1,55 @@
+# Task ID: 4
+# Title: 데이터베이스 스키마 설계 및 구현
+# Status: pending
+# Dependencies: 1
+# Priority: medium
+# Description: 시장 데이터, 거래 내역, 사용자 설정을 위한 데이터베이스 스키마 설계
+# Details:
+PostgreSQL 14+ 사용, SQLAlchemy 2.0 ORM, Alembic 마이그레이션. 테이블: market_data(OHLCV), orders, balances, trading_signals, strategies, user_settings. 인덱싱 최적화, 파티셔닝(시계열 데이터), 백업 전략
+
+# Test Strategy:
+스키마 생성/삭제 테스트, 마이그레이션 테스트, 성능 테스트, 데이터 무결성 검증
+
+# Subtasks:
+## 1. ERD 설계 및 테이블 구조 정의 [pending]
+### Dependencies: None
+### Description: 시장 데이터, 거래 내역, 사용자 설정을 위한 데이터베이스 ERD 설계 및 테이블 구조 정의
+### Details:
+market_data(OHLCV), orders, balances, trading_signals, strategies, user_settings 테이블의 컬럼 정의, 데이터 타입 선택, 기본키/외래키 관계 설정, 제약 조건 정의
+
+## 2. SQLAlchemy 2.0 모델 클래스 구현 [pending]
+### Dependencies: 4.1
+### Description: 정의된 테이블 구조를 기반으로 SQLAlchemy ORM 모델 클래스 구현
+### Details:
+각 테이블에 대응하는 SQLAlchemy 모델 클래스 생성, relationship 정의, 타입 힌트 적용, __repr__ 메서드 구현
+
+## 3. Alembic 마이그레이션 환경 설정 [pending]
+### Dependencies: 4.2
+### Description: 데이터베이스 스키마 버전 관리를 위한 Alembic 마이그레이션 환경 구성
+### Details:
+alembic init 실행, alembic.ini 설정, env.py 구성, 초기 마이그레이션 스크립트 생성 및 테스트
+
+## 4. 인덱스 및 성능 최적화 구현 [pending]
+### Dependencies: 4.3
+### Description: 쿼리 성능 향상을 위한 인덱스 설계 및 최적화 구현
+### Details:
+시계열 데이터 조회용 복합 인덱스 생성, EXPLAIN ANALYZE를 통한 쿼리 성능 분석, 인덱스 선택도 최적화
+
+## 5. 시계열 데이터 파티셔닝 전략 구현 [pending]
+### Dependencies: 4.4
+### Description: market_data 테이블의 시계열 데이터 파티셔닝 구현
+### Details:
+날짜 기준 파티셔닝 설정, 자동 파티션 생성 스크립트, 파티션 프루닝 설정, 파티션별 인덱스 관리
+
+## 6. 데이터베이스 연결 및 세션 관리 구현 [pending]
+### Dependencies: 4.5
+### Description: 비동기 데이터베이스 연결 풀 및 세션 관리 시스템 구현
+### Details:
+asyncpg 기반 연결 풀 설정, SQLAlchemy async session 관리, 컨텍스트 매니저 구현, 연결 상태 모니터링
+
+## 7. 백업 및 복구 전략 구현 [pending]
+### Dependencies: 4.6
+### Description: 데이터베이스 백업 및 복구 전략 수립 및 자동화 스크립트 구현
+### Details:
+pg_dump 기반 정기 백업 스크립트, 포인트 인 타임 복구 설정, 백업 파일 압축 및 보관 정책, 복구 테스트 스크립트
+

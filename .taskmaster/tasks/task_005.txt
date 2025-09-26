@@ -1,0 +1,61 @@
+# Task ID: 5
+# Title: 종목 선정 알고리즘 구현
+# Status: pending
+# Dependencies: 3, 4
+# Priority: high
+# Description: 데이트레이딩에 적합한 5개 종목을 자동 선정하는 알고리즘 개발
+# Details:
+24시간 거래량, ATR(Average True Range), RSI, 볼린저 밴드 폭, 스프레드 등 지표 계산. 가중 점수 시스템으로 종목 순위 결정. 매일 한국시간 09:00에 종목 재선정. Pandas, NumPy, TA-Lib 활용
+
+# Test Strategy:
+지표 계산 정확성 테스트, 종목 순위 검증, 백테스팅 데이터 활용 검증
+
+# Subtasks:
+## 1. 거래량 분석 로직 구현 [pending]
+### Dependencies: None
+### Description: 24시간 거래량 데이터 수집 및 분석 로직 개발
+### Details:
+빗썸 API에서 24시간 거래량 데이터 수집, 평균 거래량 대비 비교 분석, 거래량 급등 감지 알고리즘 구현. 시간대별 거래량 패턴 분석 및 정규화 점수 계산
+
+## 2. ATR(Average True Range) 계산 구현 [pending]
+### Dependencies: None
+### Description: 변동성 측정을 위한 ATR 지표 계산 로직 개발
+### Details:
+TA-Lib을 활용한 ATR 계산, 14일 기간 ATR 값 산출, 변동성 점수 정규화, 데이트레이딩에 적합한 변동성 범위 설정 및 필터링 로직 구현
+
+## 3. RSI 지표 계산 및 분석 [pending]
+### Dependencies: None
+### Description: 상대강도지수(RSI) 계산 및 과매수/과매도 분석 로직 구현
+### Details:
+14일 RSI 계산, 30-70 구간 필터링, RSI 다이버전스 감지, 모멘텀 점수 산출. 단기 트레이딩에 적합한 RSI 레벨 조정 및 점수화 시스템 구현
+
+## 4. 볼린저 밴드 폭 계산 [pending]
+### Dependencies: None
+### Description: 볼린저 밴드 폭을 이용한 변동성 및 돌파 가능성 분석
+### Details:
+20일 이동평균 기반 볼린저 밴드 계산, 밴드 폭(Band Width) 산출, 밴드 압축/확장 패턴 감지, 돌파 확률 점수 계산. 스퀴즈 상황 감지 로직 구현
+
+## 5. 스프레드 분석 로직 구현 [pending]
+### Dependencies: None
+### Description: 호가창 스프레드 분석을 통한 유동성 평가 시스템 개발
+### Details:
+실시간 호가창 데이터 수집, Bid-Ask 스프레드 계산, 스프레드 변화율 분석, 유동성 점수 산출. 시장 깊이(Market Depth) 분석 및 슬리피지 예측 로직 포함
+
+## 6. 가중 점수 시스템 구현 [pending]
+### Dependencies: 5.1, 5.2, 5.3, 5.4, 5.5
+### Description: 각 지표별 가중치 적용 및 종합 점수 계산 시스템 개발
+### Details:
+지표별 가중치 설정(거래량 30%, ATR 25%, RSI 20%, 볼린저밴드 15%, 스프레드 10%), 정규화된 점수 계산, 이상치 필터링, 동적 가중치 조정 기능 구현
+
+## 7. 종목 순위 결정 로직 구현 [pending]
+### Dependencies: 5.6
+### Description: 가중 점수 기반 종목 순위 결정 및 상위 5개 종목 선별 로직 개발
+### Details:
+종합 점수 기반 종목 랭킹, 상위 5개 종목 자동 선별, 기존 보유 종목과의 비교 분석, 교체 기준 설정, 백테스팅 성과 검증 로직 포함
+
+## 8. 스케줄링 및 자동 재선정 시스템 구현 [pending]
+### Dependencies: 5.7
+### Description: 매일 09:00 자동 종목 재선정을 위한 스케줄링 시스템 개발
+### Details:
+APScheduler를 이용한 한국시간 09:00 자동 실행, 시장 휴장일 체크, 재선정 결과 로깅, 알림 발송 기능, 실패 시 재시도 로직 및 백업 메커니즘 구현
+

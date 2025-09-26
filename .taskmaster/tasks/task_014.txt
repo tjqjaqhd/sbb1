@@ -1,0 +1,49 @@
+# Task ID: 14
+# Title: 로깅 및 모니터링 시스템 구현
+# Status: pending
+# Dependencies: 8, 9
+# Priority: medium
+# Description: 운영 모니터링과 디버깅을 위한 로깅 시스템 구현
+# Details:
+Structured logging(JSON), 로그 레벨별 분류, 일별 로그 로테이션, ELK Stack 연동 준비. 성능 메트릭 수집(Prometheus), 알람 설정, 시스템 헬스 체크, 에러 추적(Sentry 연동)
+
+# Test Strategy:
+로그 포맷 검증, 로그 로테이션 테스트, 메트릭 수집 정확성 검증, 알람 발송 테스트
+
+# Subtasks:
+## 1. Structured JSON 로깅 시스템 구현 [pending]
+### Dependencies: None
+### Description: JSON 형태의 구조화된 로깅 시스템을 구현하여 로그 파싱과 분석이 용이하도록 설정
+### Details:
+Python logging 모듈 확장, JSON 포맷터 구현, 로그 레벨별(DEBUG, INFO, WARNING, ERROR, CRITICAL) 구조화된 메시지 형태 정의, 타임스탬프, 요청 ID, 사용자 ID 등 메타데이터 포함
+
+## 2. 로그 로테이션 및 아카이빙 시스템 구현 [pending]
+### Dependencies: 14.1
+### Description: 일별 로그 로테이션과 오래된 로그 파일 아카이빙 시스템을 구현
+### Details:
+RotatingFileHandler 설정, 일별 로그 파일 분리, 압축 아카이빙(gzip), 보관 기간 설정(30일), 디스크 사용량 임계치 모니터링, 자동 정리 스케줄러
+
+## 3. Prometheus 메트릭 수집 시스템 구현 [pending]
+### Dependencies: None
+### Description: 성능 메트릭 수집을 위한 Prometheus 연동 시스템을 구현
+### Details:
+prometheus_client 라이브러리 활용, HTTP 요청 메트릭(응답시간, 요청수), 비즈니스 메트릭(거래 성공률, API 호출 빈도), 시스템 메트릭(CPU, 메모리, 디스크), /metrics 엔드포인트 구현
+
+## 4. 헬스 체크 및 상태 모니터링 시스템 구현 [pending]
+### Dependencies: 14.3
+### Description: 시스템 상태를 실시간으로 모니터링하는 헬스 체크 시스템을 구현
+### Details:
+/health, /ready 엔드포인트 구현, 데이터베이스 연결 상태, 외부 API 연결 상태, 메모리 사용률, 디스크 공간 체크, 의존성 서비스 상태 확인, 상태별 HTTP 응답 코드 정의
+
+## 5. 알람 및 알림 시스템 구현 [pending]
+### Dependencies: 14.3, 14.4
+### Description: 임계치 기반 알람과 다양한 채널로의 알림 발송 시스템을 구현
+### Details:
+임계치 설정(CPU > 80%, 메모리 > 90%, 에러율 > 5%), 이메일 알림(SMTP), 텔레그램 봇 알림, 디스코드 웹훅, 알림 중복 방지 로직, 알림 히스토리 관리
+
+## 6. Sentry 에러 추적 시스템 연동 [pending]
+### Dependencies: 14.1
+### Description: 실시간 에러 추적과 성능 모니터링을 위한 Sentry 연동을 구현
+### Details:
+sentry-sdk 설정, 자동 에러 캡처, 성능 트레이싱, 사용자 컨텍스트 정보 첨부, 릴리스 추적, 에러 그룹핑 및 알림 설정, 개발/운영 환경별 DSN 설정
+

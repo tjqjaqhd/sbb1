@@ -269,19 +269,28 @@ class BithumbHTTPClient:
                     logger.error(f"빗썸 API 오류 [{response.status}]: {exception.message}")
                     raise exception
 
-                # 빗썸 API 응답에서 status 필드 체크
-                api_status = response_data.get("status")
-                if api_status and api_status != "0000":
-                    # API 레벨에서의 오류
-                    exception = create_bithumb_exception(
-                        status_code=200,  # HTTP는 성공이지만 API 레벨 오류
-                        response_data=response_data,
-                        default_message="API 응답 오류"
-                    )
-                    logger.error(f"빗썸 API 응답 오류 [{api_status}]: {exception.message}")
-                    raise exception
-
-                return response_data
+                # 빗썸 API 응답 형태 확인 및 처리
+                if isinstance(response_data, list):
+                    # 리스트 형태의 응답인 경우 (계좌 조회 등)
+                    logger.debug(f"빗썸 API 응답 (리스트): {len(response_data)}개 항목")
+                    return {"data": response_data}
+                elif isinstance(response_data, dict):
+                    # 딕셔너리 형태의 응답인 경우
+                    api_status = response_data.get("status")
+                    if api_status and api_status != "0000":
+                        # API 레벨에서의 오류
+                        exception = create_bithumb_exception(
+                            status_code=200,  # HTTP는 성공이지만 API 레벨 오류
+                            response_data=response_data,
+                            default_message="API 응답 오류"
+                        )
+                        logger.error(f"빗썸 API 응답 오류 [{api_status}]: {exception.message}")
+                        raise exception
+                    return response_data
+                else:
+                    # 예상치 못한 응답 형태
+                    logger.warning(f"예상치 못한 응답 형태: {type(response_data)}")
+                    return {"data": response_data}
 
         except asyncio.TimeoutError as e:
             logger.error(f"빗썸 API 타임아웃: {url}")

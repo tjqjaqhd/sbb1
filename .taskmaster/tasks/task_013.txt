@@ -1,0 +1,55 @@
+# Task ID: 13
+# Title: 설정 관리 및 사용자 인터페이스 구현
+# Status: pending
+# Dependencies: 10, 11
+# Priority: medium
+# Description: API 키 관리, 전략 파라미터 설정을 위한 사용자 인터페이스 구현
+# Details:
+암호화된 설정 저장(Fernet 암호화), 2FA(TOTP) 지원, 전략별 파라미터 조정 UI, 알림 설정(이메일, 텔레그램, 디스코드), 접근 권한 관리. 설정 백업/복원 기능
+
+# Test Strategy:
+암호화/복호화 테스트, 2FA 인증 테스트, 설정 저장/로드 테스트, 권한 검증 테스트
+
+# Subtasks:
+## 1. Fernet 암호화 기반 설정 저장소 구현 [pending]
+### Dependencies: None
+### Description: API 키와 민감한 설정 데이터를 Fernet 암호화로 안전하게 저장하는 시스템 구현
+### Details:
+cryptography.fernet를 사용한 대칭 암호화, 환경변수 기반 마스터 키 관리, JSON 형태 설정 데이터 암호화/복호화, 설정 파일 읽기/쓰기 인터페이스 구현
+
+## 2. 2FA(TOTP) 인증 시스템 구현 [pending]
+### Dependencies: 13.1
+### Description: Google Authenticator 호환 TOTP 기반 2단계 인증 시스템 구현
+### Details:
+pyotp 라이브러리 활용, QR 코드 생성, 인증 코드 검증, 백업 코드 생성 및 관리, 인증 세션 관리, 2FA 활성화/비활성화 기능
+
+## 3. 전략별 파라미터 조정 UI 구현 [pending]
+### Dependencies: 13.1
+### Description: 각 거래 전략의 파라미터를 실시간으로 조정할 수 있는 웹 인터페이스 구현
+### Details:
+동적 폼 생성, 파라미터 유효성 검사, 실시간 미리보기, 변경사항 즉시 적용, 파라미터 히스토리 관리, 기본값 복원 기능
+
+## 4. 다중 알림 채널 연동 시스템 구현 [pending]
+### Dependencies: 13.1
+### Description: 이메일, 텔레그램, 디스코드를 통한 알림 발송 시스템 구현
+### Details:
+SMTP 이메일 발송, Telegram Bot API 연동, Discord Webhook 연동, 알림 템플릿 관리, 채널별 우선순위 설정, 알림 이력 관리
+
+## 5. 접근 권한 관리 시스템 구현 [pending]
+### Dependencies: 13.2
+### Description: 사용자 역할 기반 접근 제어 및 권한 관리 시스템 구현
+### Details:
+역할 기반 접근 제어(RBAC), 권한 매트릭스 정의, 사용자 그룹 관리, API 엔드포인트별 권한 검사, 감사 로그 기록, 세션 관리
+
+## 6. 설정 백업/복원 기능 구현 [pending]
+### Dependencies: 13.1, 13.3
+### Description: 시스템 설정의 백업과 복원을 위한 자동화 시스템 구현
+### Details:
+설정 데이터 내보내기/가져오기, 스케줄 기반 자동 백업, 백업 파일 암호화, 복원 전 검증, 백업 버전 관리, 클라우드 스토리지 연동 옵션
+
+## 7. 보안 테스트 및 취약점 검증 [pending]
+### Dependencies: 13.1, 13.2, 13.4, 13.5
+### Description: 구현된 설정 관리 시스템의 보안성 검증 및 취약점 테스트 수행
+### Details:
+암호화 강도 테스트, 2FA 우회 시도 테스트, 권한 에스컬레이션 테스트, 입력값 검증 테스트, 세션 하이재킹 방지 검증, 보안 헤더 설정 확인
+

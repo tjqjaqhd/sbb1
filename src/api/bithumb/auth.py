@@ -11,8 +11,10 @@ import hashlib
 import json
 import time
 import uuid
+from datetime import datetime, timezone
 from typing import Optional, Tuple, Dict, Any
 from pathlib import Path
+from urllib.parse import quote_plus
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -224,27 +226,31 @@ class BithumbAPIKeyManager:
 
     def generate_query_string(self, params: Dict[str, Any]) -> str:
         """
-        빗썸 API 2.0 규격에 맞는 쿼리 문자열 생성
+        빗썸 API 2.0 규격에 맞는 쿼리 문자열 생성 (URL 인코딩 포함)
 
         Args:
             params: 요청 파라미터
 
         Returns:
-            쿼리 문자열
+            URL 인코딩된 쿼리 문자열
         """
         if not params:
             return ""
 
-        # 파라미터를 알파벳 순으로 정렬
+        # 파라미터를 알파벳 순으로 정렬하고 URL 인코딩 적용
         sorted_items = []
         for key in sorted(params.keys()):
             value = params[key]
             # 값이 리스트인 경우 처리
             if isinstance(value, list):
                 for v in value:
-                    sorted_items.append(f"{key}={v}")
+                    encoded_key = quote_plus(str(key))
+                    encoded_value = quote_plus(str(v))
+                    sorted_items.append(f"{encoded_key}={encoded_value}")
             else:
-                sorted_items.append(f"{key}={value}")
+                encoded_key = quote_plus(str(key))
+                encoded_value = quote_plus(str(value))
+                sorted_items.append(f"{encoded_key}={encoded_value}")
 
         return "&".join(sorted_items)
 
@@ -256,13 +262,10 @@ class BithumbAPIKeyManager:
             params: 요청 파라미터
 
         Returns:
-            SHA512 해시 문자열
+            SHA512 해시 문자열 (파라미터가 없어도 빈 문자열의 해시 반환)
         """
-        if not params:
-            return ""
-
-        query_string = self.generate_query_string(params)
-        # SHA512 해시 생성
+        query_string = self.generate_query_string(params) if params else ""
+        # 빈 문자열도 포함해서 모든 경우에 SHA512 해시 생성
         return hashlib.sha512(query_string.encode('utf-8')).hexdigest()
 
     def generate_jwt_token(self, endpoint: str, params: Optional[Dict[str, Any]] = None) -> str:
@@ -283,23 +286,42 @@ class BithumbAPIKeyManager:
         payload = {
             "access_key": self.api_key,
             "nonce": str(uuid.uuid4()),
-            "timestamp": int(time.time() * 1000)  # 밀리초 단위
+            "timestamp": int(datetime.now(timezone.utc).timestamp() * 1000)  # UTC 밀리초 정밀도
         }
 
-        # 파라미터가 있는 경우 쿼리 해시 추가
-        if params:
-            payload["query_hash"] = self.generate_query_hash(params)
-            payload["query_hash_alg"] = "SHA512"
+        # 빗썸 API는 모든 인증 요청에 query_hash 필수 (파라미터 없어도 필요)
+        payload["query_hash"] = self.generate_query_hash(params)
+        payload["query_hash_alg"] = "SHA512"
 
         try:
+            # JWT 헤더 명시적 설정
+            headers = {
+                "typ": "JWT",
+                "alg": "HS256"
+            }
+
             # HMAC-SHA256으로 JWT 토큰 생성
             token = jwt.encode(
                 payload,
                 self.secret_key,
-                algorithm="HS256"
+                algorithm="HS256",
+                headers=headers
             )
 
-            logger.debug(f"JWT 토큰 생성 완료: nonce={payload['nonce']}")
+            # JWT 토큰 구조 검증 및 디버깅
+            logger.debug(f"JWT 토큰 생성 완료 - 길이: {len(token)}")
+            logger.debug(f"JWT 페이로드: nonce={payload['nonce']}, timestamp={payload['timestamp']}")
+
+            if params and 'query_hash' in payload:
+                logger.debug(f"쿼리 해시: {payload['query_hash'][:20]}...")
+
+            # JWT 토큰 파싱하여 구조 검증 (개발 모드에서만)
+            try:
+                decoded = jwt.decode(token, options={"verify_signature": False})
+                logger.debug(f"JWT 디코딩 성공 - 페이로드 키: {list(decoded.keys())}")
+            except Exception as e:
+                logger.warning(f"JWT 디코딩 실패: {e}")
+
             return token
 
         except Exception as e:
@@ -323,10 +345,10 @@ class BithumbAPIKeyManager:
         # JWT 토큰 생성
         jwt_token = self.generate_jwt_token(endpoint, params)
 
-        # 빗썸 API 2.0 필수 헤더
+        # 빗썸 API 2.0 필수 헤더 (charset=utf-8 추가)
         headers = {
             "Authorization": f"Bearer {jwt_token}",
-            "Content-Type": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
             "Accept": "application/json",
             "User-Agent": "BithumbTradingBot/1.0"
         }

@@ -1,0 +1,55 @@
+# Task ID: 15
+# Title: Docker 컨테이너화 및 배포 환경 구축
+# Status: pending
+# Dependencies: 11, 13, 14
+# Priority: medium
+# Description: 애플리케이션의 Docker 컨테이너화 및 운영 환경 구축
+# Details:
+Multi-stage Dockerfile, Docker Compose (app, db, redis), 환경별 설정(dev/prod), 헬스 체크, 자동 재시작 설정. GitHub Actions CI/CD, 무중단 배포, 데이터베이스 마이그레이션 자동화, 모니터링 대시보드
+
+# Test Strategy:
+컨테이너 빌드 테스트, 배포 시나리오 테스트, 헬스 체크 검증, 롤백 테스트
+
+# Subtasks:
+## 1. Multi-stage Dockerfile 작성 [pending]
+### Dependencies: None
+### Description: 애플리케이션용 최적화된 Multi-stage Dockerfile 생성
+### Details:
+Python 3.11+ base 이미지 사용, 의존성 설치 단계와 애플리케이션 실행 단계 분리, 보안 강화를 위한 non-root 사용자 설정, 불필요한 파일 제거로 이미지 크기 최적화
+
+## 2. Docker Compose 환경 구성 [pending]
+### Dependencies: 15.1
+### Description: 애플리케이션, 데이터베이스, Redis를 포함한 Docker Compose 설정
+### Details:
+app, db(PostgreSQL), redis 서비스 정의, 네트워크 및 볼륨 설정, 환경 변수 관리, 포트 매핑, 의존성 순서 정의
+
+## 3. 환경별 설정 관리 시스템 구축 [pending]
+### Dependencies: 15.2
+### Description: 개발, 스테이징, 운영 환경별 설정 파일 및 환경 변수 관리
+### Details:
+docker-compose.dev.yml, docker-compose.prod.yml 분리, 환경별 .env 파일 관리, 시크릿 관리 방식 구현, 설정 검증 로직
+
+## 4. 헬스 체크 및 모니터링 설정 [pending]
+### Dependencies: 15.2
+### Description: 컨테이너 상태 모니터링 및 헬스 체크 엔드포인트 구현
+### Details:
+Dockerfile HEALTHCHECK 지시문 추가, FastAPI 헬스 체크 엔드포인트 구현, Docker Compose 헬스 체크 설정, 로그 수집 및 모니터링 대시보드 구성
+
+## 5. GitHub Actions CI/CD 파이프라인 구축 [pending]
+### Dependencies: 15.3, 15.4
+### Description: 자동화된 빌드, 테스트, 배포 파이프라인 구현
+### Details:
+워크플로우 파일 작성, 테스트 자동화, Docker 이미지 빌드 및 푸시, 시크릿 관리, 브랜치별 배포 전략 구현
+
+## 6. 무중단 배포 시스템 구현 [pending]
+### Dependencies: 15.5
+### Description: Blue-Green 또는 Rolling 배포를 통한 무중단 서비스 배포
+### Details:
+배포 전략 선택 및 구현, 트래픽 라우팅 설정, 배포 스크립트 작성, 롤백 메커니즘 구현, 배포 상태 모니터링
+
+## 7. 데이터베이스 마이그레이션 자동화 [pending]
+### Dependencies: 15.6
+### Description: 배포 시 데이터베이스 스키마 변경사항 자동 적용 시스템
+### Details:
+마이그레이션 스크립트 관리 시스템, 배포 프로세스에 마이그레이션 통합, 백업 및 롤백 전략, 스키마 버전 관리
+
