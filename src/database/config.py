@@ -8,7 +8,7 @@ import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Optional
 
-from sqlalchemy import create_engine, event
+from sqlalchemy import create_engine, event, text
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -63,8 +63,7 @@ class DatabaseConfig:
         # 비동기 엔진 생성
         self._engine = create_async_engine(
             self.database_url,
-            # 연결 풀 설정
-            poolclass=QueuePool,
+            # 연결 풀 설정 (비동기 엔진에서는 QueuePool 제거)
             pool_size=20,                    # 기본 연결 수
             max_overflow=30,                 # 추가 연결 수
             pool_timeout=30,                 # 연결 대기 타임아웃

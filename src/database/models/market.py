@@ -65,9 +65,10 @@ class MarketData(Base):
         UniqueConstraint('symbol', 'timeframe', 'timestamp', name='uq_market_data_symbol_timeframe_timestamp'),
         Index('idx_market_data_symbol_timestamp', 'symbol', 'timestamp'),
         Index('idx_market_data_timeframe_timestamp', 'timeframe', 'timestamp'),
-        {
-            'postgresql_partition_by': 'RANGE (timestamp)',
-        }
+        # 파티셔닝은 일단 제거 (나중에 수동으로 설정 가능)
+        # {
+        #     'postgresql_partition_by': 'RANGE (timestamp)',
+        # }
     )
 
 

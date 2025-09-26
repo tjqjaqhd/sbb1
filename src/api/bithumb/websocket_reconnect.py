@@ -131,7 +131,7 @@ class WebSocketReconnectManager:
     @property
     def is_connected(self) -> bool:
         """연결 여부 확인"""
-        return self._websocket is not None and not self._websocket.closed
+        return self._websocket is not None and self._websocket.state.name == 'OPEN'
 
     @property
     def current_attempt(self) -> int:

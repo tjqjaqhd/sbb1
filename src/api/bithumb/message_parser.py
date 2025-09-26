@@ -23,6 +23,7 @@ class MessageType(str, Enum):
     """WebSocket 메시지 타입"""
     TICKER = "ticker"
     ORDERBOOK = "orderbook"
+    ORDERBOOKDEPTH = "orderbookdepth"  # 빗썸의 실제 orderbook 타입
     TRANSACTION = "transaction"
     ERROR = "error"
     STATUS = "status"
@@ -415,7 +416,7 @@ class MessageParser:
             # 타입별 데이터 파싱
             if message_type == MessageType.TICKER:
                 message.ticker_data = self._parse_ticker_data(raw_data)
-            elif message_type == MessageType.ORDERBOOK:
+            elif message_type == MessageType.ORDERBOOK or message_type == MessageType.ORDERBOOKDEPTH:
                 message.orderbook_data = self._parse_orderbook_data(raw_data)
             elif message_type == MessageType.TRANSACTION:
                 message.transaction_data = self._parse_transaction_data(raw_data)

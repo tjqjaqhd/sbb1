@@ -146,7 +146,7 @@ class BithumbWebSocketClient:
         if self._reconnect_manager:
             return self._reconnect_manager.is_connected
         return self._connection_state == ConnectionState.CONNECTED and \
-               self._websocket is not None and not self._websocket.closed
+               self._websocket is not None and self._websocket.state.name == 'OPEN'
 
     @property
     def stats(self) -> Dict[str, Any]:
@@ -376,10 +376,29 @@ class BithumbWebSocketClient:
         Returns:
             전송 성공 여부
         """
-        subscription_message = {
-            "type": subscription_type.value,
-            "symbols": symbols
-        }
+        # 빗썸 WebSocket API 올바른 구독 형태 적용
+        if subscription_type == SubscriptionType.TICKER:
+            subscription_message = {
+                "type": "ticker",
+                "symbols": symbols,
+                "tickTypes": ["24H"]  # 필수 파라미터
+            }
+        elif subscription_type == SubscriptionType.ORDERBOOK:
+            subscription_message = {
+                "type": "orderbookdepth",  # orderbook 대신 orderbookdepth 사용
+                "symbols": symbols
+            }
+        elif subscription_type == SubscriptionType.TRANSACTION:
+            subscription_message = {
+                "type": "transaction",
+                "symbols": symbols
+            }
+        else:
+            # 기본 형태
+            subscription_message = {
+                "type": subscription_type.value,
+                "symbols": symbols
+            }
 
         return await self.send_message(subscription_message)
 
@@ -596,7 +615,7 @@ class BithumbWebSocketClient:
 
     def __del__(self):
         """소멸자에서 연결 정리"""
-        if self._websocket and not self._websocket.closed:
+        if self._websocket and self._websocket.state.name == 'OPEN':
             try:
                 loop = asyncio.get_event_loop()
                 if not loop.is_closed():

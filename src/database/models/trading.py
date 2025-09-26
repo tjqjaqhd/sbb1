@@ -178,7 +178,12 @@ class TradeHistory(Base):
     commission: Mapped[Decimal] = mapped_column(DECIMAL(20, 8), nullable=False)
 
     # 연관 정보
-    order_id: Mapped[str] = mapped_column(String(50), nullable=False)
+    order_id: Mapped[int] = mapped_column(
+        BigInteger,
+        ForeignKey("orders.id"),
+        nullable=False
+    )  # 내부 주문 ID (외래키)
+    bithumb_order_id: Mapped[Optional[str]] = mapped_column(String(50))  # 빗썸 주문 ID (검색용)
     signal_id: Mapped[Optional[int]] = mapped_column(
         Integer,
         ForeignKey("trading_signals.id")
